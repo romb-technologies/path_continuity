@@ -16,12 +16,300 @@
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QGraphicsView" name="graphicsView"/>
+     <widget class="QSplitter" name="splitter_10">
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QGraphicsView" name="graphicsView"/>
+       <widget class="QTabWidget" name="tabWidget">
+        <property name="currentIndex">
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="tab">
+         <attribute name="title">
+          <string>Path</string>
+         </attribute>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QGroupBox" name="groupBox">
+            <property name="title">
+             <string>Curve 1</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <item>
+              <widget class="QTextBrowser" name="bezier1"/>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>v_max:</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="vmax1">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.500000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="mm1">
+               <item>
+                <property name="text">
+                 <string>Aligned mode</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Crab mode</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Exponential mode #1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Exponential mode #2</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_3">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_2">
+                <property name="text">
+                 <string>Alpha:</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="alpha1">
+                <property name="minimum">
+                 <double>-180.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>180.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>n:</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="n1">
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="groupBox_2">
+            <property name="title">
+             <string>Curve 2</string>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QTextBrowser" name="bezier2"/>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_5">
+                <property name="text">
+                 <string>v_max:</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="vmax2">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.500000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QComboBox" name="mm2">
+               <item>
+                <property name="text">
+                 <string>Aligned mode</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Crab mode</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Exponential mode #1</string>
+                </property>
+               </item>
+               <item>
+                <property name="text">
+                 <string>Exponential mode #2</string>
+                </property>
+               </item>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_6">
+                <property name="text">
+                 <string>Alpha:</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="alpha2">
+                <property name="minimum">
+                 <double>-180.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>180.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+             <item>
+              <widget class="QSplitter" name="splitter_8">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <widget class="QLabel" name="label_7">
+                <property name="text">
+                 <string>n:</string>
+                </property>
+               </widget>
+               <widget class="QDoubleSpinBox" name="n2">
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="tab_2">
+         <attribute name="title">
+          <string>Vehicle</string>
+         </attribute>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QSplitter" name="splitter_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Number of wheels:</string>
+             </property>
+            </widget>
+            <widget class="QSpinBox" name="wheel_num">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>6</number>
+             </property>
+             <property name="value">
+              <number>2</number>
+             </property>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QTreeWidget" name="vehicle">
+            <property name="columnCount">
+             <number>3</number>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">2</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string notr="true">3</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+      <widget class="QSplitter" name="splitter_9">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <widget class="QCustomPlot" name="plot1" native="true"/>
+       <widget class="QCustomPlot" name="plot2" native="true"/>
+       <widget class="QCustomPlot" name="plot3" native="true"/>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header>qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

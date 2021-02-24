@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui printsupport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,7 +22,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-CONFIG += c++11
+CONFIG += c++17
+# DLIB
+INCLUDEPATH += $$PWD/dlib/include/
+LIBS += -L$$PWD/dlib/lib/
+LIBS += -ldlib
 
 INCLUDEPATH += /usr/include/eigen3 \
                ../include
@@ -33,20 +37,28 @@ SOURCES += \
         qgraphicsviewzoom.cpp \
         customscene.cpp \
         qcurve.cpp \
-        qpolycurve.cpp \
         ../src/bezier.cpp \
         ../src/polycurve.cpp \
+../src/MotionModes/crab.cpp \
+../src/MotionModes/tangent_aligned.cpp \
+../src/MotionModes/motion_mode.cpp \
+qcustomplot.cpp \
+    wheel.cpp
 
 HEADERS += \
         mainwindow.h \
         qgraphicsviewzoom.h \
         customscene.h \
         qcurve.h \
-        qpolycurve.h \
         ../include/Bezier/bezier.h \
         ../include/Bezier/polycurve.h \
         ../include/Bezier/declarations.h \
-        ../include/Bezier/legendre_gauss.h
+        ../include/Bezier/legendre_gauss.h \
+../include/MotionModes/motion_mode.h \
+../include/MotionModes/crab.h \
+../include/MotionModes/tangent_aligned.h \
+qcustomplot.h \
+    wheel.h
 
 FORMS += \
         mainwindow.ui
