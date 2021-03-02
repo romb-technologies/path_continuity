@@ -294,7 +294,6 @@
        </property>
        <widget class="QCustomPlot" name="plot1" native="true"/>
        <widget class="QCustomPlot" name="plot2" native="true"/>
-       <widget class="QCustomPlot" name="plot3" native="true"/>
       </widget>
      </widget>
     </item>

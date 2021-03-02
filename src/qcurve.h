@@ -4,8 +4,8 @@
 #include <QGraphicsItem>
 #include <QSpinBox>
 
-#include "Bezier/bezier.h"
-#include "Bezier/declarations.h"
+#include <Bezier/bezier.h>
+#include <Bezier/declarations.h>
 
 #include "ui_mainwindow.h"
 

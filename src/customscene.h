@@ -2,6 +2,7 @@
 #define CUSTOMSCENE_H
 
 #include <QGraphicsScene>
+#include <QTextStream>
 
 #include "qcurve.h"
 #include "qgraphicsviewzoom.h"

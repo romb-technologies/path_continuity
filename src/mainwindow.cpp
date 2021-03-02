@@ -70,10 +70,8 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   // set labels:
   ui->plot1->xAxis->setLabelFont(QFont("Times", 10));
   ui->plot2->xAxis->setLabelFont(QFont("Times", 10));
-  ui->plot3->xAxis->setLabelFont(QFont("Times", 10));
   ui->plot1->xAxis->setLabel("Distance along path [m]");
   ui->plot2->xAxis->setLabel("Distance along path [m]");
-  ui->plot3->xAxis->setLabel("Distance along path [m]");
 
   ui->plot1->yAxis->setLabelFont(QFont("Times", 10));
   ui->plot2->yAxis->setLabelFont(QFont("Times", 10));
@@ -85,7 +83,6 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   // set ticks:
   ui->plot1->xAxis->setTickLabelFont(QFont("Times", 10));
   ui->plot2->xAxis->setTickLabelFont(QFont("Times", 10));
-  ui->plot3->xAxis->setTickLabelFont(QFont("Times", 10));
   ui->plot1->yAxis->setTickLabelFont(QFont("Times", 10));
   ui->plot2->yAxis->setTickLabelFont(QFont("Times", 10));
   ui->plot2->yAxis2->setTickLabelFont(QFont("Times", 10));
@@ -137,55 +134,49 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
       ui->plot2->savePdf(file_path, 0, 0, QCP::epNoCosmetic);
     }
   });
-  connect(ui->plot3, &QCustomPlot::mouseRelease, this, [&](QMouseEvent* e) {
-    //    if (e->button() == Qt::RightButton)
-    //      ui->plot3->savePdf(saveAs(), 0, 0, QCP::epNoCosmetic);
 
-    QPrinter printer(QPrinter::HighResolution);
-    printer.setPageSize(
-        QPageSize(scene->itemsBoundingRect().size().scaled(90, 90, Qt::AspectRatioMode::KeepAspectRatio),
-                  QPageSize::Unit::Point));
-    printer.setOrientation(QPrinter::Portrait);
-    printer.setOutputFormat(QPrinter::PdfFormat);
-    printer.setFullPage(true);
-    auto file_path = saveAs();
-    if (file_path == QString())
-      return;
-    printer.setOutputFileName(file_path);
+//    QPrinter printer(QPrinter::HighResolution);
+//    printer.setPageSize(
+//        QPageSize(scene->itemsBoundingRect().size().scaled(90, 90, Qt::AspectRatioMode::KeepAspectRatio),
+//                  QPageSize::Unit::Point));
+//    printer.setOrientation(QPrinter::Portrait);
+//    printer.setOutputFormat(QPrinter::PdfFormat);
+//    printer.setFullPage(true);
+//    auto file_path = saveAs();
+//    if (file_path == QString())
+//      return;
+//    printer.setOutputFileName(file_path);
 
-    QPainter p;
+//    QPainter p;
 
-    if (!p.begin(&printer))
-    {
-      qDebug() << "Error!";
-      return;
-    }
+//    if (!p.begin(&printer))
+//    {
+//      qDebug() << "Error!";
+//      return;
+//    }
 
-    this->scene->render(&p);
-    p.end();
+//    this->scene->render(&p);
+//    p.end();
 
-    int sl = file_path.lastIndexOf('/') + 1;
-    int un = file_path.lastIndexOf('_');
-    QString file_path2 = file_path.left(sl) + "angle" + file_path.right(6);
-    ui->plot2->savePdf(file_path2, 0, 0, QCP::epNoCosmetic);
-    QString file_path3 = file_path.left(sl) + "speed" + file_path.right(6);
-    ui->plot1->savePdf(file_path3, 0, 0, QCP::epNoCosmetic);
-    // ovdje dodati export i ostalih
-  });
+//    int sl = file_path.lastIndexOf('/') + 1;
+//    QString file_path2 = file_path.left(sl) + "angle" + file_path.right(6);
+//    ui->plot2->savePdf(file_path2, 0, 0, QCP::epNoCosmetic);
+//    QString file_path3 = file_path.left(sl) + "speed" + file_path.right(6);
+//    ui->plot1->savePdf(file_path3, 0, 0, QCP::epNoCosmetic);
+//    // ovdje dodati export i ostalih
 
   ui->plot1->setInteraction(QCP::iRangeDrag, true);
   ui->plot2->setInteraction(QCP::iRangeDrag, true);
-  ui->plot3->setInteraction(QCP::iRangeDrag, true);
+
   ui->plot1->axisRect()->setRangeDrag(Qt::Horizontal);
   ui->plot2->axisRect()->setRangeDrag(Qt::Horizontal);
-  ui->plot3->axisRect()->setRangeDrag(Qt::Horizontal);
 
   ui->plot1->setInteraction(QCP::iRangeZoom, true);
   ui->plot2->setInteraction(QCP::iRangeZoom, true);
-  ui->plot3->setInteraction(QCP::iRangeZoom, true);
+
   ui->plot1->axisRect()->setRangeZoom(Qt::Horizontal);
   ui->plot2->axisRect()->setRangeZoom(Qt::Horizontal);
-  ui->plot3->axisRect()->setRangeZoom(Qt::Horizontal);
+
 
   // curves
   //  connect(ui->alpha1, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &MainWindow::applyContinuity);
@@ -326,6 +317,7 @@ void MainWindow::applyContinuity()
     break;
   }
 
+  dlib::thread_pool tp(std::thread::hardware_concurrency());
   std::function<void(std::vector<double>, Bezier::Curve&, Bezier::Curve&)> applyParams;
   std::function<double(std::vector<double>)> evaluate = [&](std::vector<double> params) {
     Bezier::Curve temp1 = *curve_1;
@@ -344,7 +336,7 @@ void MainWindow::applyContinuity()
     return time(sim.v_sim1, sim.s1) + time(sim.v_sim2, sim.s2);
   };
 
-  constexpr std::chrono::seconds opt_max_duration(240);
+  constexpr std::chrono::seconds opt_max_duration(15);
 
   if (mm_1->type == "aligned" && mm_2->type == "aligned")
   {
@@ -352,7 +344,7 @@ void MainWindow::applyContinuity()
     applyParams = [](std::vector<double> params, Bezier::Curve& curve_1, Bezier::Curve& curve_2) {
       curve_2.applyContinuity(curve_1, {params[0], params[1], params[2]});
     };
-    auto result = dlib::find_min_global(
+    auto result = dlib::find_min_global(tp,
         [&](double x0, double x1, double x2) {
           return evaluate({x0, x1, x2});
         },
@@ -375,7 +367,7 @@ void MainWindow::applyContinuity()
       curve_2.manipulateControlPoint(2, curve_1.endPoints().second + params[4] * dc);
     };
 
-    auto result = dlib::find_min_global(
+    auto result = dlib::find_min_global(tp,
         [&](double x0, double x1, double x2, double x3, double x4) {
           return evaluate({x0, x1, x2, x3, x4});
         },
@@ -397,7 +389,7 @@ void MainWindow::applyContinuity()
       curve_2.manipulateControlPoint(2, curve_1.endPoints().second + params[4] * dc);
     };
 
-    auto result = dlib::find_min_global(
+    auto result = dlib::find_min_global(tp,
         [&](double x0, double x1, double x2, double x3, double x4) {
           return evaluate({x0, x1, x2, x3, x4});
         },
@@ -405,7 +397,7 @@ void MainWindow::applyContinuity()
     applyParams({result.x(0), result.x(1), result.x(2), result.x(3), result.x(4)}, *curve_1, *curve_2);
   }
 
-  if (mm_1->type == "aligned" && mm_2->type == "exponential_1")
+  if (mm_1->type == "aligned" && mm_2->type == "exponential_2")
   {
     ui->alpha2->setValue(ui->alpha1->value());
     applyParams = [&](std::vector<double> params, Bezier::Curve& curve_1, Bezier::Curve& curve_2) {
@@ -417,18 +409,20 @@ void MainWindow::applyContinuity()
       curve_2.manipulateControlPoint(1, curve_1.endPoints().second + params[2] * dc);
       curve_2.manipulateControlPoint(2, curve_1.endPoints().second + params[3] * dc);
 
-      double beta_1 = curve_2.derivativeAt(0).norm() / curve_1.derivativeAt(1).norm();
-      double beta_2 = (curve_2.derivativeAt(2, 0).norm() - beta_1 * beta_1 * curve_1.derivativeAt(2, 1).norm()) /
-                      curve_1.derivativeAt(1).norm();
-      double dC3_scale = n_2 * n_2 / (beta_1 * beta_1 * beta_1);
-      double beta_3 = (curve_2.derivativeAt(3, 0).norm() / dC3_scale -
-                       beta_1 * beta_1 * beta_1 * curve_1.derivativeAt(3, 1).norm() -
-                       2 * beta_1 * beta_2 * curve_1.derivativeAt(2, 1).norm()) /
-                      curve_1.derivativeAt(1).norm();
+      double beta_1 = curve_1.derivativeAt(1).norm() / curve_2.derivativeAt(0).norm();
+      double beta_2 = curve_1.derivativeAt(1).norm() / curve_2.derivativeAt(0).norm();
+
+      double dC3_scale = n_2 * n_2 * (beta_1 * beta_1 * beta_1);
+
+      double beta_3 = (curve_2.derivativeAt(3, 0).norm() * dC3_scale -
+                       beta_1 * beta_1 * beta_1 * curve_2.derivativeAt(2, 0).norm() -
+                       2 * beta_1 * beta_2 * curve_2.derivativeAt(2, 0).norm()) /
+                      curve_2.derivativeAt(0).norm();
+
       curve_2.applyContinuity(curve_1, {beta_1, beta_2, beta_3});
     };
 
-    auto result = dlib::find_min_global(
+    auto result = dlib::find_min_global(tp,
         [&](double x0, double x1, double x2, double x3) {
           return evaluate({x0, x1, x2, x3});
         },
@@ -455,16 +449,12 @@ void MainWindow::updatePlot()
   pen.setStyle(Qt::DashLine);
   static QCPItemStraightLine* infLine1 = new QCPItemStraightLine(ui->plot1);
   static QCPItemStraightLine* infLine2 = new QCPItemStraightLine(ui->plot2);
-  static QCPItemStraightLine* infLine3 = new QCPItemStraightLine(ui->plot3);
   infLine1->setPen(pen);
   infLine2->setPen(pen);
-  infLine3->setPen(pen);
   infLine1->point1->setCoords(data.s1.back(), 0); // location of point 1 in plot coordinate
   infLine1->point2->setCoords(data.s1.back(), 1); // location of point 2 in plot coordinate
   infLine2->point1->setCoords(data.s1.back(), 0); // location of point 1 in plot coordinate
   infLine2->point2->setCoords(data.s1.back(), 1); // location of point 2 in plot coordinate
-  infLine3->point1->setCoords(data.s1.back(), 0); // location of point 1 in plot coordinate
-  infLine3->point2->setCoords(data.s1.back(), 1); // location of point 2 in plot coordinate
 
   /// plot brzina
   {
@@ -598,45 +588,6 @@ void MainWindow::updatePlot()
     ui->plot2->replot();
   }
 
-  /// plot orijentacija
-  {
-    constexpr int n_ori = 2;
-    while (ui->plot3->graphCount() < 2 * N + n_ori)
-      ui->plot3->addGraph();
-    while (ui->plot3->graphCount() > 2 * N + n_ori)
-      ui->plot3->removeGraph(ui->plot3->graphCount() - 1);
-
-    auto g_theta1 = ui->plot3->graph(0);
-    auto g_theta2 = ui->plot3->graph(1);
-
-    g_theta1->setData(data.s1, data.theta1, true);
-    g_theta2->setData(data.s2, data.theta2, true);
-
-    pen.setStyle(Qt::SolidLine);
-    pen.setColor(matlab_colors[0]);
-    pen.setWidth(3);
-    g_theta1->setPen(pen);
-    g_theta2->setPen(pen);
-
-    for (int k = 0; k < N; k++)
-    {
-      auto g_delta1 = ui->plot3->graph(n_ori + 2 * k + 0);
-      auto g_delta2 = ui->plot3->graph(n_ori + 2 * k + 1);
-
-      g_delta1->setData(data.s1, data.delta1[k], true);
-      g_delta2->setData(data.s2, data.delta2[k], true);
-
-      pen.setWidth(1);
-      pen.setColor(matlab_colors[k + 1]);
-      g_delta1->setPen(pen);
-      g_delta2->setPen(pen);
-    }
-
-    ui->plot3->xAxis->rescale(true);
-    ui->plot3->yAxis->rescale(true);
-    ui->plot3->replot();
-  }
-
   auto print = [](double x) {
     std::ostringstream res;
     res.precision(3);
@@ -647,27 +598,24 @@ void MainWindow::updatePlot()
       res << "  " << std::fixed << x << " ";
     return res;
   };
-  std::stringstream bezier1, bezier2;
 
-  for (int k = 0; k < curve_1->control_points_.rows() - 1; k++)
+  std::stringstream bezier1, bezier2;
+  auto cp1 = curve_1->controlPoints();
+  auto cp2 = curve_1->controlPoints();
+  for (auto& p : cp1)
   {
-    Bezier::Point p = curve_1->control_points_.row(k);
     p = {std::round(p.x() * 10) / 1000., std::round(p.y() * 10) / 1000.};
     bezier1 << "( " << print(p.x()).str() << ",&\\ " << print(p.y()).str() << " ) \\\\\n";
   }
-  Bezier::Point p = curve_1->control_points_.row(curve_1->order());
-  p = {std::round(p.x() * 10) / 1000., std::round(p.y() * 10) / 1000.};
-  bezier1 << "( " << print(p.x()).str() << ",&\\ " << print(p.y()).str() << " )";
-
-  for (int k = 0; k < curve_2->control_points_.rows() - 1; k++)
+  for (auto& p : cp1)
   {
-    Bezier::Point p = curve_2->control_points_.row(k);
     p = {std::round(p.x() * 10) / 1000., std::round(p.y() * 10) / 1000.};
     bezier2 << "( " << print(p.x()).str() << ",&\\ " << print(p.y()).str() << " ) \\\\\n";
   }
-  p = curve_2->control_points_.row(curve_1->order());
-  p = {std::round(p.x() * 10) / 1000., std::round(p.y() * 10) / 1000.};
-  bezier2 << "( " << print(p.x()).str() << ",&\\ " << print(p.y()).str() << " )";
+  cp1.back() = {std::round(cp1.back().x() * 10) / 1000., std::round(cp1.back().y() * 10) / 1000.};
+  bezier1 << "( " << print(cp1.back().x()).str() << ",&\\ " << print(cp1.back().y()).str() << " )";
+  cp2.back() = {std::round(cp2.back().x() * 10) / 1000., std::round(cp2.back().y() * 10) / 1000.};
+  bezier2 << "( " << print(cp2.back().x()).str() << ",&\\ " << print(cp2.back().y()).str() << " )";
 
   ui->bezier1->setText(QString::fromStdString(bezier1.str()));
   ui->bezier2->setText(QString::fromStdString(bezier2.str()));
@@ -746,11 +694,6 @@ MainWindow::Data MainWindow::calculateData(const Bezier::Curve& curve_1, const B
 
   double S = curve_1.length() / 100;
 
-  {
-    auto a1 = mm_1->phi(curve_1, 1.0);
-    auto a2 = mm_2->phi(curve_2, 0.0);
-    auto a3 = 5;
-  }
   /////////// izracun limita brzine
   ///
   ///
