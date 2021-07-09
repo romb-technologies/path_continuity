@@ -1,67 +1,31 @@
 
-# Bezier
-[![Build Status](https://api.travis-ci.com/romb-technologies/Bezier.svg?branch=master)](https://api.travis-ci.com/romb-technologies/Bezier)
-![v0.3](https://img.shields.io/badge/version-0.3-blue.svg)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/aceb46ce7de1407abd56cfc127dba5f1)](https://www.codacy.com/manual/stribor14/Bezier?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stribor14/Bezier-cpp&amp;utm_campaign=Badge_Grade)
+## About
 
-Fast and lightweight class for using the Bezier curves of any order in C++
-
-*Some algorithm implementations are based on [A Primer on Bezier Curves](https://pomax.github.io/bezierinfo/) by Pomax*
-
-## Key Features
-  - Any number of control points
-  - Fast operations on curves
-  - Dynamic manipulation
-  - Composite Bezier curves (polycurves)
-
-CMake *find_package()* compatible!
-```
-find_package(Bezier)
-target_link_libraries(target bezier)
-```
-
-## Implemented methods
-  - Get value, derivative, curvature, tangent and normal for a parameter *t*
-  - Point projection onto curve
-  - Get curve length, parameter iteration by length
-  - Get a derivative curve (hodograph)
-  - Split into subcurves
-  - Find curve roots, extrema and bounding box
-  - Find points of intersection
-  - Elevate/lower order
-  - Apply parametric and geometric continuities
-  - etc.
-  
-## Wish list
-    - [ ] Polycurve - oversee continuities between consecutive sub-curves
-    - [ ] Polycurve - propagation of sub-curve manipulation depending on continutiy
-    - [ ] Bezier shapes
-    - [ ] More sophisticated example
+A Qt application for demostration of how path continuity affect velocity and steering values of a mobile robot. This tool was developed as a complementary addition to the "Path  continuity  for  multi-wheeled  AGVs" paper pusblished in the RA-L journal. For more information, contact authors.
 
 ## Dependencies
-  - c++11
-  - Eigen3
 
-## Instalation
-### System-wide installation
-```
-git clone https://github.com/romb-technologies/Bezier
-mkdir Bezier/build
-cd Bezier/build
-cmake ..
-make
-make install
-```
-### ROS
-- for use within a ROS workspace without the system-wide installation, clone the repo to src folder in you catkin workspace 
+- qt5
+- Bezier
+- dlib (v19-21)
 
-## Example program
-A small Qt5 based program written as a playground for manipulating Bezier curves.
-- press *__H__* for a list of possible actions
-- *outdated* - newer features are not used in the example application
+## Examples
+### Discountinuous path for vehicle with two actuated S/D wheels
+Nominal values for vehicle with two actuated wheels moving along two path segments. Both segments utilize "tangential" mode with alpha = 0 and their parametric curves are G_1 continuous. Even though speed limit profiles (solid lines) are not continuous, the simulated speed profile (dashed line) is adjusted to respect the limits. Additionally, it can be observed that all speed profiles reach their limits simultaneously. Vehicle orientation is continuous, but steering angles (solid line) and angular velocities (dashed line) are prominently discontinuous. A real vehicle with finite steering speed can not achieve perfect following, even under ideal conditions. In practice, severe oscillations may occur at the segment junction.
 
-### Additional dependencies
- - qt5-default 
+<img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/path_1.png" alt="path1" width="275"/>  <img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/speed_1.png" alt="speed1" width="275"/>  <img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/angle_1.png" alt="angle1" width="275"/>
 
-## Licence
-Apache License Version 2.0
+### Countinuous path for vehicle with two actuated S/D wheels
+Nominal values for vehicle with two actuated wheels moving along two path segments. Both segments utilize the "tangential" mode with angle offset alpha = 0, while their parametric curves are G_3 continuous. Speed limit profiles are continuous so there is no need for simulated speed profile to compensate for the discontinuities as in previous example, and additionaly, all of the observed values are now continuous.
+
+<img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/path_2.png" alt="path2" width="275"/>  <img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/speed_2.png" alt="speed2" width="275"/>  <img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/angle_2.png" alt="angle2" width="275"/>
+
+### Countinuous path for vehicle with six actuated S/D wheels
+Nominal values for a vehicle with six actuated wheels moving along two path segments with angle offset alpha=14. The first segment utilizes the "tangential" mode, while the second segment utilizes the "exponential" mode with n=1.7. Curves are modified to be continuous. All of the observed speed profiles respect their corresponding limits, and all the observed values are continuous.
+ 
+<img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/path_3.png" alt="path3" width="275"/>  <img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/speed_3.png" alt="speed3" width="275"/>  <img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/angle_3.png" alt="angle3" width="275"/>
+
+
+## Simulation data
+
+Simulation data used in the article can be found in "simulation_data" folder.
