@@ -135,35 +135,35 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
     }
   });
 
-//    QPrinter printer(QPrinter::HighResolution);
-//    printer.setPageSize(
-//        QPageSize(scene->itemsBoundingRect().size().scaled(90, 90, Qt::AspectRatioMode::KeepAspectRatio),
-//                  QPageSize::Unit::Point));
-//    printer.setOrientation(QPrinter::Portrait);
-//    printer.setOutputFormat(QPrinter::PdfFormat);
-//    printer.setFullPage(true);
-//    auto file_path = saveAs();
-//    if (file_path == QString())
-//      return;
-//    printer.setOutputFileName(file_path);
+  //    QPrinter printer(QPrinter::HighResolution);
+  //    printer.setPageSize(
+  //        QPageSize(scene->itemsBoundingRect().size().scaled(90, 90, Qt::AspectRatioMode::KeepAspectRatio),
+  //                  QPageSize::Unit::Point));
+  //    printer.setOrientation(QPrinter::Portrait);
+  //    printer.setOutputFormat(QPrinter::PdfFormat);
+  //    printer.setFullPage(true);
+  //    auto file_path = saveAs();
+  //    if (file_path == QString())
+  //      return;
+  //    printer.setOutputFileName(file_path);
 
-//    QPainter p;
+  //    QPainter p;
 
-//    if (!p.begin(&printer))
-//    {
-//      qDebug() << "Error!";
-//      return;
-//    }
+  //    if (!p.begin(&printer))
+  //    {
+  //      qDebug() << "Error!";
+  //      return;
+  //    }
 
-//    this->scene->render(&p);
-//    p.end();
+  //    this->scene->render(&p);
+  //    p.end();
 
-//    int sl = file_path.lastIndexOf('/') + 1;
-//    QString file_path2 = file_path.left(sl) + "angle" + file_path.right(6);
-//    ui->plot2->savePdf(file_path2, 0, 0, QCP::epNoCosmetic);
-//    QString file_path3 = file_path.left(sl) + "speed" + file_path.right(6);
-//    ui->plot1->savePdf(file_path3, 0, 0, QCP::epNoCosmetic);
-//    // ovdje dodati export i ostalih
+  //    int sl = file_path.lastIndexOf('/') + 1;
+  //    QString file_path2 = file_path.left(sl) + "angle" + file_path.right(6);
+  //    ui->plot2->savePdf(file_path2, 0, 0, QCP::epNoCosmetic);
+  //    QString file_path3 = file_path.left(sl) + "speed" + file_path.right(6);
+  //    ui->plot1->savePdf(file_path3, 0, 0, QCP::epNoCosmetic);
+  //    // ovdje dodati export i ostalih
 
   ui->plot1->setInteraction(QCP::iRangeDrag, true);
   ui->plot2->setInteraction(QCP::iRangeDrag, true);
@@ -177,13 +177,13 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->plot1->axisRect()->setRangeZoom(Qt::Horizontal);
   ui->plot2->axisRect()->setRangeZoom(Qt::Horizontal);
 
-
   // curves
+  connect(ui->optimize, &QPushButton::pressed, this, &MainWindow::applyContinuity);
   //  connect(ui->alpha1, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &MainWindow::applyContinuity);
   //  connect(ui->alpha2, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &MainWindow::applyContinuity);
-  connect(ui->n1, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &MainWindow::applyContinuity);
+  //  connect(ui->n1, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &MainWindow::applyContinuity);
   //  connect(ui->n2, qOverload<double>(&QDoubleSpinBox::valueChanged), this, &MainWindow::applyContinuity);
-  connect(ui->mm1, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::applyContinuity);
+  //  connect(ui->mm1, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::applyContinuity);
   //  connect(ui->mm2, qOverload<int>(&QComboBox::currentIndexChanged), this, &MainWindow::applyContinuity);
 
   // vehicle tab
@@ -344,7 +344,8 @@ void MainWindow::applyContinuity()
     applyParams = [](std::vector<double> params, Bezier::Curve& curve_1, Bezier::Curve& curve_2) {
       curve_2.applyContinuity(curve_1, {params[0], params[1], params[2]});
     };
-    auto result = dlib::find_min_global(tp,
+    auto result = dlib::find_min_global(
+        tp,
         [&](double x0, double x1, double x2) {
           return evaluate({x0, x1, x2});
         },
@@ -367,7 +368,8 @@ void MainWindow::applyContinuity()
       curve_2.manipulateControlPoint(2, curve_1.endPoints().second + params[4] * dc);
     };
 
-    auto result = dlib::find_min_global(tp,
+    auto result = dlib::find_min_global(
+        tp,
         [&](double x0, double x1, double x2, double x3, double x4) {
           return evaluate({x0, x1, x2, x3, x4});
         },
@@ -389,7 +391,8 @@ void MainWindow::applyContinuity()
       curve_2.manipulateControlPoint(2, curve_1.endPoints().second + params[4] * dc);
     };
 
-    auto result = dlib::find_min_global(tp,
+    auto result = dlib::find_min_global(
+        tp,
         [&](double x0, double x1, double x2, double x3, double x4) {
           return evaluate({x0, x1, x2, x3, x4});
         },
@@ -422,7 +425,8 @@ void MainWindow::applyContinuity()
       curve_2.applyContinuity(curve_1, {beta_1, beta_2, beta_3});
     };
 
-    auto result = dlib::find_min_global(tp,
+    auto result = dlib::find_min_global(
+        tp,
         [&](double x0, double x1, double x2, double x3) {
           return evaluate({x0, x1, x2, x3});
         },

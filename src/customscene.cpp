@@ -36,7 +36,7 @@ void CustomScene::drawForeground(QPainter* painter, const QRectF& rect)
       {
         Bezier::PointVector inter;
         if (is_curve_item(items()[k]) && is_curve_item(items()[i]))
-          inter = static_cast<qCurve*>(items()[i])->intersection(*static_cast<qCurve*>(items()[k]));
+          inter = static_cast<qCurve*>(items()[i])->intersections(*static_cast<qCurve*>(items()[k]));
 
         for (auto& dot : inter)
           painter->drawEllipse(QPointF(dot.x(), dot.y()), 3, 3);
@@ -80,7 +80,7 @@ void CustomScene::mousePressEvent(QGraphicsSceneMouseEvent* mouseEvent)
       if (mouseEvent->modifiers().testFlag(Qt::ControlModifier))
       {
 
-        Bezier::Parameter t = c_curve->projectPoint(p);
+        double t = c_curve->projectPoint(p);
         auto pt = c_curve->valueAt(t);
         if ((pt - p).norm() < 10)
           curve->setSelected(true);
