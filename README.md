@@ -3,6 +3,8 @@
 
 A Qt application for demostration of how path continuity affect velocity and steering values of a mobile robot. This tool was developed as a complementary addition to the "Path  continuity  for  multi-wheeled  AGVs" paper pusblished in the RA-L journal. For more information, contact authors.
 
+<img src="https://raw.githubusercontent.com/romb-technologies/path_continuity/ral/figures/app.png" alt="path2" width="750"/> 
+
 ## Dependencies
 
 - qt5
